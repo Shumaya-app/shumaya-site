@@ -411,22 +411,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 []
   </script>
 
-  <div id="cookie-banner" style="display:none;position:fixed;bottom:20px;left:20px;right:20px;max-width:480px;background:#1A1714;color:#F7F2EA;font-family:'Manrope',sans-serif;padding:24px 28px;z-index:99999;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
-    <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#C8C3BA;">We use cookies to understand how you use our site. <a href="privacy.html" style="color:#DB6418;text-decoration:underline;">Privacy Policy</a></p>
-    <div style="display:flex;gap:10px;">
-      <button onclick="cookieChoice('declined')" style="flex:1;background:transparent;color:#C8C3BA;border:1px solid #3A3630;font-family:inherit;font-weight:700;font-size:13px;padding:11px 0;border-radius:100px;cursor:pointer;">Decline</button>
-      <button onclick="cookieChoice('accepted')" style="flex:1;background:#DB6418;color:#1A1714;border:none;font-family:inherit;font-weight:800;font-size:13px;padding:11px 0;border-radius:100px;cursor:pointer;">Accept</button>
-    </div>
-  </div>
   <script>
-    function cookieChoice(v){
-      localStorage.setItem('shumaya_cookies',v);
-      document.getElementById('cookie-banner').style.display='none';
-      if(v==='accepted') loadGA();
-    }
-    if(!localStorage.getItem('shumaya_cookies')){
-      document.getElementById('cookie-banner').style.display='block';
-    }
+    window.addEventListener('load', function(){
+      if(localStorage.getItem('shumaya_cookies')) return;
+      var b=document.createElement('div');b.id='cookie-banner';
+      b.style.cssText='position:fixed;bottom:20px;left:20px;right:20px;max-width:480px;background:#1A1714;color:#F7F2EA;font-family:Manrope,sans-serif;padding:24px 28px;z-index:99999;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2)';
+      b.innerHTML='<p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#C8C3BA">We use cookies to understand how you use our site. <a href=\"privacy.html\" style=\"color:#DB6418;text-decoration:underline\">Privacy Policy</a></p><div style=\"display:flex;gap:10px\"><button id=\"ck-decline\" style=\"flex:1;background:transparent;color:#C8C3BA;border:1px solid #3A3630;font-family:inherit;font-weight:700;font-size:13px;padding:11px 0;border-radius:100px;cursor:pointer\">Decline</button><button id=\"ck-accept\" style=\"flex:1;background:#DB6418;color:#1A1714;border:none;font-family:inherit;font-weight:800;font-size:13px;padding:11px 0;border-radius:100px;cursor:pointer\">Accept</button></div>';
+      document.body.appendChild(b);
+      function choose(v){localStorage.setItem('shumaya_cookies',v);b.remove();if(v==='accepted')loadGA();}
+      document.getElementById('ck-decline').onclick=function(){choose('declined');};
+      document.getElementById('ck-accept').onclick=function(){choose('accepted');};
+    });
   </script>
 
   <script type="__bundler/template">
