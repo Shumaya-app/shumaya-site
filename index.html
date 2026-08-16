@@ -33,13 +33,18 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="theme-color" content="#DB6418">
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0HSJ0FQKVG"></script>
+  <!-- Google Analytics (loads only after cookie consent) -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-0HSJ0FQKVG');
+    function loadGA(){
+      if(document.getElementById('ga-script'))return;
+      var s=document.createElement('script');s.id='ga-script';s.async=true;
+      s.src='https://www.googletagmanager.com/gtag/js?id=G-0HSJ0FQKVG';
+      document.head.appendChild(s);
+      window.dataLayer=window.dataLayer||[];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag=gtag;gtag('js',new Date());gtag('config','G-0HSJ0FQKVG');
+    }
+    if(localStorage.getItem('shumaya_cookies')==='accepted') loadGA();
   </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -414,6 +419,25 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   <script type="__bundler/page_order">
 []
+  </script>
+
+  <!-- Cookie Consent Banner -->
+  <div id="cookie-banner" style="display:none;position:fixed;bottom:20px;left:20px;right:20px;max-width:480px;background:#1A1714;color:#F7F2EA;font-family:'Manrope',sans-serif;padding:24px 28px;z-index:99999;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#C8C3BA;">We use cookies to understand how you use our site. <a href="privacy.html" style="color:#DB6418;text-decoration:underline;">Privacy Policy</a></p>
+    <div style="display:flex;gap:10px;">
+      <button onclick="cookieChoice('declined')" style="flex:1;background:transparent;color:#C8C3BA;border:1px solid #3A3630;font-family:inherit;font-weight:700;font-size:13px;padding:11px 0;border-radius:100px;cursor:pointer;">Decline</button>
+      <button onclick="cookieChoice('accepted')" style="flex:1;background:#DB6418;color:#1A1714;border:none;font-family:inherit;font-weight:800;font-size:13px;padding:11px 0;border-radius:100px;cursor:pointer;">Accept</button>
+    </div>
+  </div>
+  <script>
+    function cookieChoice(v){
+      localStorage.setItem('shumaya_cookies',v);
+      document.getElementById('cookie-banner').style.display='none';
+      if(v==='accepted') loadGA();
+    }
+    if(!localStorage.getItem('shumaya_cookies')){
+      document.getElementById('cookie-banner').style.display='block';
+    }
   </script>
 
   <script type="__bundler/template">
